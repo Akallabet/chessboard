@@ -1,0 +1,13 @@
+{
+  "colors": {
+    "w": "White",
+    "b": "Black"
+  },
+  "controls": {
+    "randomWhitePawn": "Add white pawn",
+    "reset": "reset"
+  },
+  "activeColor": "{color} to move",
+  "checkmate": "Checkmate",
+  "draw": "Draw"
+}
