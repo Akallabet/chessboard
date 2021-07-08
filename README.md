@@ -2,8 +2,6 @@
 
 ## [Live version](https://akallabet.github.io/chessboard/)
 
-## [Code Sandbox](https://codesandbox.io/s/wonderful-lewin-geftn)
-
 ## Contents
 
 1. [ Features ](#features)
@@ -15,36 +13,12 @@
 ## Features
 
 - Display a chessboard with a default FEN of: 8/2p5/8/8/8/8/8/8 w KQkq - 0 1
-- Display a button that adds a white pawn to a random legal position on the board
-- Allow that pawn to make legal moves across the board.
-
-Additional Features
-
-- The white pawn button can add as many white pawns as there are free legal positions on the board
 - Allow to select every piece on the board and to move it
 - Add an undo "<" button
 - Add a redo ">" button
 - Add a reset button
 
 ## Structure
-
-```
-src/game
-```
-
-This is the js game logic which is indipendent from the UI, it exports a function that accepts an object with:
-
-- FEN: (only with pawns) - String - Required
-- board - Array
-- activePiece - Object
-- capturedPieces - Array
-
-It returns a set of functions that, upon invocation, return the resulting status:
-
-- FEN: new FEN configuration
-- board: Array representation of a chessboard
-- activePiece: current selected piece
-- capturedPieces: Array of captured pieces
 
 ```
 src/game/components
