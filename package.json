@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "chess board",
   "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Akallabet/chessboard.git"
+  },
   "scripts": {
     "clean": "rm public/app.js",
     "dev": "webpack --mode development",

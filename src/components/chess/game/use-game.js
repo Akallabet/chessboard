@@ -8,6 +8,12 @@ export const useGame = ({ onMove, defaultInitialData }) => {
   const data = useLoadData() || defaultInitialData
 
   const [info, setEngine] = useState(() => start(data))
+  const [metaBoard, setMetaBoard] = useState(game.getMoves())
+  const [activePiece, setActivePiece] = useState()
+  const [promotionPieces, setPromotionPieces] = useState([])
+  const [isPromotionModalOpen, setIsPromotionModalOpen] = useState(false)
+  const openPromotionModal = () => setIsPromotionModalOpen(true)
+  const closePromotionModal = () => setIsPromotionModalOpen(false)
 
   const {
     state,
@@ -23,31 +29,38 @@ export const useGame = ({ onMove, defaultInitialData }) => {
     history,
   } = state
 
-  const getEmptyMoves = () => game.getMoves()()
   const move = (input) => game.move(input)(info)
   const getMove = (origin, destination) => game.getMove({ origin, destination })(info)
   const getMoves = (input) => game.getMoves(input)(info)
   const undo = () => game.undo()(info)
   const redo = () => game.redo()(info)
 
-  const [metaBoard, setMetaBoard] = useState(() => getEmptyMoves())
-  const [activePiece, setActivePiece] = useState()
-  const [promotionPieces, setPromotionPieces] = useState()
-  const [isPromotionModalOpen, setIsPromotionModalOpen] = useState(false)
-  const openPromotionModal = () => setIsPromotionModalOpen(true)
-  const closePromotionModal = () => setIsPromotionModalOpen(false)
-
   useEffect(() => {
-    if (promotionPieces && promotionPieces.length) openPromotionModal(true)
+    if (promotionPieces.length) {
+      openPromotionModal(true)
+    } else {
+      setActivePiece()
+    }
   }, [promotionPieces])
 
   useEffect(() => {
     if (!isPromotionModalOpen) {
-      setPromotionPieces()
-      setActivePiece()
-      setMetaBoard(getEmptyMoves())
+      setPromotionPieces([])
     }
   }, [isPromotionModalOpen])
+
+  useEffect(() => {
+    setMetaBoard(game.getMoves())
+  }, [info])
+
+  useEffect(() => {
+    if (activePiece) {
+      const { file, rank } = activePiece
+      setMetaBoard(getMoves(`${file}${rank}`))
+    } else {
+      setMetaBoard(game.getMoves())
+    }
+  }, [activePiece])
 
   useStorage({ state })
 
@@ -65,31 +78,20 @@ export const useGame = ({ onMove, defaultInitialData }) => {
     isPromotionModalOpen,
     promotionPieces,
     getMove,
-    selectPiece: (piece) => {
-      const { file, rank } = piece
-      setActivePiece(piece)
-      setMetaBoard(getMoves(`${file}${rank}`))
-    },
-    deselectPiece: () => {
-      setActivePiece()
-      setMetaBoard(getEmptyMoves())
-    },
+    selectPiece: setActivePiece,
+    deselectPiece: setActivePiece,
     moveActivePiece: (args) => {
       setEngine(move(args))
       onMove()
-      setMetaBoard(getEmptyMoves())
     },
     undo: () => {
       setEngine(undo())
-      setMetaBoard(getEmptyMoves())
     },
     redo: () => {
       setEngine(redo())
-      setMetaBoard(getEmptyMoves())
     },
     reset: () => {
       setEngine(start(defaultInitialData))
-      setMetaBoard(getEmptyMoves())
     },
     setPromotionPieces,
     closePromotionModal,

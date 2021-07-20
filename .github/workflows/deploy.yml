@@ -1,5 +1,6 @@
 name: Test, Build and Deploy
 on: [push]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -14,7 +15,12 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm run build
+
+      - name: Test
+        run: npm run test:ci
+
+      - name: Build
+        run: npm run build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
